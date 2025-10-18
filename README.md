@@ -17,7 +17,6 @@ Use the following credentials to access the appropriate portal on the [CMCS Home
 |--------------------|--------------------------------|------------|
 | **Admin**          | admin@cmcs.com                 | 4A$eimaj   |
 | **Program Coordinator** | programcoordinator@cmcs.com     | 4A$eimaj   |
-| **Lecturer**       | jamieabrahams123234@gmail.com  | 4A$eimaj   |
 
 > 📝 *Lecturers may also create their own account via the [Register](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net/) page if preferred.*
 
