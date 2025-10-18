@@ -1,0 +1,85 @@
+﻿@model IEnumerable<CMCS.Models.Claim>
+
+@{
+    ViewData["Title"] = "Claims Management";
+}
+
+<style>
+    .dashboard-wrapper {
+        padding: 40px 24px;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-buttons form {
+        display: inline-block;
+        margin-right: 5px;
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="container-fluid" style="max-width: 1400px;">
+        <h1 class="mb-4">Claims Management Dashboard</h1>
+
+        <div class="dashboard-card">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>Lecturer</th>
+                        <th>Date Submitted</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var claim in Model)
+                    {
+                        <tr>
+                            <td>#@claim.Id</td>
+                            <td>@claim.User.FirstName @claim.User.LastName</td>
+                            <td>@claim.SubmissionDate.ToShortDateString()</td>
+                            <td>@claim.Amount.ToString("C")</td>
+                            <td><span class="badge bg-@GetStatusBadgeClass(claim.Status)">@claim.Status.ToString()</span></td>
+                            <td class="text-center action-buttons">
+                                @if (claim.Status == ClaimStatus.Pending)
+                                {
+                                    <form asp-action="UpdateStatus" method="post">
+                                        <input type="hidden" name="claimId" value="@claim.Id" />
+                                        <input type="hidden" name="newStatus" value="@ClaimStatus.Approved" />
+                                        <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                    </form>
+                                    <form asp-action="UpdateStatus" method="post">
+                                        <input type="hidden" name="claimId" value="@claim.Id" />
+                                        <input type="hidden" name="newStatus" value="@ClaimStatus.Rejected" />
+                                        <button type="submit" class="btn btn-sm btn-danger">Decline</button>
+                                    </form>
+                                }
+                                <a asp-controller="CoordinatorApp" asp-action="Details" asp-route-id="@claim.Id" class="btn btn-sm btn-outline-secondary">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@{
+    string GetStatusBadgeClass(ClaimStatus status)
+    {
+        return status switch
+        {
+            ClaimStatus.Pending => "warning text-dark",
+            ClaimStatus.Approved => "success",
+            ClaimStatus.Rejected => "danger",
+            _ => "secondary",
+        };
+    }
+}

@@ -7,19 +7,6 @@
 
 A robust web-based application designed to streamline the monthly contract claims process for lecturers. This system, built for the PROG6212 module, provides an intuitive interface for lecturers to log hours and for academic managers to review and approve claims efficiently.
 
-https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net
-
-## 🔐 CMCS Login Credentials
-
-Use the following credentials to access the appropriate portal on the [CMCS Home Page](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net/):
-
-| Role               | Email                          | Password   |
-|--------------------|--------------------------------|------------|
-| **Admin**          | admin@cmcs.com                 | 4A$eimaj   |
-| **Program Coordinator** | programcoordinator@cmcs.com     | 4A$eimaj   |
-
-> 📝 *Lecturers may also create their own account via the [Register](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net/) page if preferred.*
-
 ## Table of Contents
 * [Introduction](#introduction)
 * [Key Features](#key-features)

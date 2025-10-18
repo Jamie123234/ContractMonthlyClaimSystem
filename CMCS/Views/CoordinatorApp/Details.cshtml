@@ -1,0 +1,62 @@
+﻿@model CMCS.Models.Claim
+
+@{
+    ViewData["Title"] = "Claim Details";
+}
+
+<style>
+    .details-wrapper {
+        padding: 40px 24px;
+    }
+
+    .details-card {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="details-wrapper">
+    <div class="details-card">
+        <h1 class="mb-4">Claim Details</h1>
+        <hr />
+        <dl class="row mt-4">
+            <dt class="col-sm-3">Claim ID</dt>
+            <dd class="col-sm-9">#@Model.Id</dd>
+
+            <dt class="col-sm-3">Lecturer</dt>
+            <dd class="col-sm-9">@Model.User.FirstName @Model.User.LastName</dd>
+
+            <dt class="col-sm-3">Submission Date</dt>
+            <dd class="col-sm-9">@Model.SubmissionDate.ToLongDateString()</dd>
+
+            <dt class="col-sm-3">Amount</dt>
+            <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9"><span class="badge bg-@GetStatusBadgeClass(Model.Status)">@Model.Status.ToString()</span></dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9"><p>@Model.Description</p></dd>
+        </dl>
+        <div class="mt-4">
+            <a asp-action="Index" class="btn btn-secondary">Back to Claims List</a>
+        </div>
+    </div>
+</div>
+
+@{
+    string GetStatusBadgeClass(ClaimStatus status)
+    {
+        return status switch
+        {
+            ClaimStatus.Pending => "warning text-dark",
+            ClaimStatus.Approved => "success",
+            ClaimStatus.Rejected => "danger",
+            _ => "secondary",
+        };
+    }
+}

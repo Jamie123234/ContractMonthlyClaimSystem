@@ -1,0 +1,53 @@
+﻿@model CMCS.Models.Claim
+
+@{
+    ViewData["Title"] = "Claim Details";
+}
+
+<div class="dashboard-wrapper">
+    <div class="container-fluid" style="max-width: 900px;">
+        <h1 class="mb-4">Claim Details</h1>
+        <div class="dashboard-card">
+            <dl class="row">
+                <dt class="col-sm-3">Claim ID</dt>
+                <dd class="col-sm-9">#@Model.Id</dd>
+
+                <dt class="col-sm-3">Submission Date</dt>
+                <dd class="col-sm-9">@Model.SubmissionDate.ToLongDateString()</dd>
+
+                <dt class="col-sm-3">Amount</dt>
+                <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9"><span class="badge bg-@GetStatusBadgeClass(Model.Status)">@Model.Status.ToString()</span></dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                @if (!string.IsNullOrEmpty(Model.DocumentPath))
+                {
+                    <dt class="col-sm-3">Attachment</dt>
+                    <dd class="col-sm-9">
+                        <a href="@Model.DocumentPath" target="_blank">View Document</a>
+                    </dd>
+                }
+            </dl>
+            <div class="mt-4">
+                <a asp-action="Claims" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    string GetStatusBadgeClass(ClaimStatus status)
+    {
+        return status switch
+        {
+            ClaimStatus.Pending => "warning text-dark",
+            ClaimStatus.Approved => "success",
+            ClaimStatus.Rejected => "danger",
+            _ => "secondary",
+        };
+    }
+}

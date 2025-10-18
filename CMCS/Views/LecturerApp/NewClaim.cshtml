@@ -1,0 +1,75 @@
+﻿@model CMCS.Models.ClaimInputModel
+
+@{
+    ViewData["Title"] = "New Claim";
+}
+
+<style>
+    .form-wrapper {
+        padding: 40px 24px;
+    }
+
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="form-wrapper">
+    <div class="form-container">
+        <h1 class="mb-4">Submit New Claim</h1>
+
+        <form asp-action="NewClaim" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="HoursWorked" class="form-label"></label>
+                    <input asp-for="HoursWorked" class="form-control" />
+                    <span asp-validation-for="HoursWorked" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="HourlyRate" class="form-label"></label>
+                    <div class="input-group">
+                        <span class="input-group-text">R</span>
+                        <input asp-for="HourlyRate" class="form-control" />
+                    </div>
+                    <span asp-validation-for="HourlyRate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AdditionalNotes" class="form-label"></label>
+                <textarea asp-for="AdditionalNotes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="AdditionalNotes" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Document" class="form-label">Attach Supporting Document</label>
+                <input asp-for="Document" class="form-control" />
+                <span asp-validation-for="Document" class="text-danger"></span>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Submit Claim</button>
+                <a asp-action="Claims" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

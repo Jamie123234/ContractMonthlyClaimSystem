@@ -1,0 +1,123 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CMCS.Models
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Admin Home";
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<style>
+    .admin-home-wrapper {
+        padding: 40px 24px;
+    }
+
+    .welcome-header {
+        margin-bottom: 40px;
+    }
+
+    .welcome-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .welcome-subtitle {
+        font-size: 1.125rem;
+        color: #6B7280;
+    }
+
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+    }
+
+    .action-card {
+        background: white;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+    .action-icon {
+        font-size: 2.5rem;
+        color: var(--primary-blue);
+        margin-bottom: 16px;
+    }
+
+    .action-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 8px;
+    }
+
+    .action-description {
+        color: #6B7280;
+        flex-grow: 1;
+        margin-bottom: 24px;
+    }
+
+    .action-button {
+        background-color: var(--primary-blue);
+        color: white;
+        text-decoration: none;
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+
+        .action-button:hover {
+            background-color: var(--primary-light);
+            color: white;
+        }
+</style>
+
+<div class="admin-home-wrapper">
+    <div class="container-fluid" style="max-width: 1400px;">
+        <div class="welcome-header">
+            <h1 class="welcome-title">Welcome, @user?.FirstName!</h1>
+            <p class="welcome-subtitle">Select an option below to manage the claim system.</p>
+        </div>
+
+        <div class="action-grid">
+            <div class="action-card">
+                <i class="fas fa-tachometer-alt action-icon"></i>
+                <h3 class="action-title">View Dashboard</h3>
+                <p class="action-description">
+                    Get a high-level overview of system activity, including claim statistics and top lecturer performance.
+                </p>
+                <a asp-action="Dashboard" class="action-button">Go to Dashboard</a>
+            </div>
+
+            <div class="action-card">
+                <i class="fas fa-users-cog action-icon"></i>
+                <h3 class="action-title">Manage Users</h3>
+                <p class="action-description">
+                    View, edit, and manage all user accounts in the system, including lecturers and coordinators.
+                </p>
+                <a asp-action="ManageUsers" class="action-button">Manage Users</a>
+            </div>
+
+            <div class="action-card">
+                <i class="fas fa-user-tag action-icon"></i>
+                <h3 class="action-title">Manage Roles</h3>
+                <p class="action-description">
+                    Assign and modify user roles to control access levels and permissions across the application.
+                </p>
+                <a asp-action="ManageRoles" class="action-button">Manage Roles</a>
+            </div>
+        </div>
+    </div>
+</div>

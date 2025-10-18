@@ -1,0 +1,260 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CMCS.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var currentAction = ViewContext.RouteData.Values["action"]!.ToString();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf--8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin | CMCS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        :root {
+            --primary-blue: #4F46E5;
+            --primary-light: #818CF8;
+            --neutral-50: #F9FAFB;
+            --neutral-100: #F3F4F6;
+            --neutral-200: #E5E7EB;
+            --neutral-600: #4B5563;
+            --neutral-800: #1F2937;
+            --neutral-900: #111827;
+        }
+
+        body {
+            background: var(--neutral-50);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+        }
+
+        .admin-layout-wrapper {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--neutral-200);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .sidebar-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue) !important;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .sidebar-nav a {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px;
+                border-radius: 8px;
+                text-decoration: none;
+                color: var(--neutral-600);
+                font-weight: 500;
+                margin-bottom: 4px;
+                transition: background-color 0.2s;
+            }
+
+                .sidebar-nav a:hover {
+                    background-color: var(--neutral-100);
+                }
+
+                .sidebar-nav a.active {
+                    background-color: var(--primary-blue);
+                    color: white;
+                }
+
+                .sidebar-nav a i {
+                    width: 20px;
+                    text-align: center;
+                }
+
+        .main-content {
+            flex-grow: 1;
+            margin-left: 260px; /* Same as sidebar width */
+        }
+
+        .top-bar {
+            background: white;
+            border-bottom: 1px solid var(--neutral-200);
+            padding: 12px 32px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: 65px;
+        }
+
+        .profile-dropdown {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-summary {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .profile-info {
+            line-height: 1.2;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .profile-role {
+            font-size: 0.8rem;
+            color: var(--neutral-600);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 200px;
+            padding: 8px;
+            z-index: 100;
+            display: none; /* Hidden by default */
+        }
+
+            .dropdown-menu.show {
+                display: block; /* Shown with JS */
+            }
+
+            .dropdown-menu a, .dropdown-menu button {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 12px;
+                text-decoration: none;
+                color: var(--neutral-800);
+                font-size: 0.9rem;
+                border: none;
+                background: none;
+                width: 100%;
+                text-align: left;
+                border-radius: 6px;
+            }
+
+                .dropdown-menu a:hover, .dropdown-menu button:hover {
+                    background-color: var(--neutral-100);
+                }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: var(--neutral-200);
+            margin: 8px 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="admin-layout-wrapper">
+        <aside class="sidebar">
+            <a class="sidebar-header" asp-controller="AdminDashboard" asp-action="Index">
+                <i class="fas fa-file-invoice"></i> CMCS
+            </a>
+            <ul class="sidebar-nav">
+                <li><a asp-action="Dashboard" class="@(currentAction == "Dashboard" ? "active" : "")"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a asp-action="ManageUsers" class="@(currentAction == "ManageUsers" || currentAction == "EditUserRoles" ? "active" : "")"><i class="fas fa-users"></i> Users</a></li>
+                <li><a asp-action="ManageRoles" class="@(currentAction == "ManageRoles" ? "active" : "")"><i class="fas fa-user-tag"></i> Roles</a></li>
+            </ul>
+        </aside>
+
+        <div class="main-content">
+            <header class="top-bar">
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-summary">
+                        <div class="profile-avatar">AD</div>
+                        <div class="profile-info">
+                            <div class="profile-name">@user?.FirstName @user?.LastName</div>
+                            <div class="profile-role">Admin</div>
+                        </div>
+                    </div>
+                    <div class="dropdown-menu" id="profileDropdownMenu">
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fas fa-user-circle"></i> View Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                        </form>
+                    </div>
+                </div>
+            </header>
+
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdown = document.getElementById('profileDropdown');
+            const menu = document.getElementById('profileDropdownMenu');
+
+            if (dropdown && menu) {
+                dropdown.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    menu.classList.toggle('show');
+                });
+
+                document.addEventListener('click', function (event) {
+                    if (!dropdown.contains(event.target)) {
+                        menu.classList.remove('show');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

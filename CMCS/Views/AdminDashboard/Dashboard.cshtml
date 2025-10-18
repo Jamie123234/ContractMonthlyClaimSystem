@@ -1,0 +1,154 @@
+﻿@model CMCS.Models.AdminDashboardViewModel
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<style>
+    .dashboard-wrapper {
+        padding: 40px 24px;
+        background: #F9FAFB;
+    }
+
+    .dashboard-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .dashboard-subtitle {
+        font-size: 1rem;
+        color: #6B7280;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .status-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 0;
+        border-bottom: 1px solid #F3F4F6;
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="container-fluid" style="max-width: 1400px;">
+        <div class="dashboard-header mb-4">
+            <h1 class="dashboard-title">Dashboard</h1>
+            <p class="dashboard-subtitle">Welcome back, here's an overview of the claim system.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="dashboard-card h-100">
+                    <h2 class="card-title">Total Claims Processed Per Month</h2>
+
+                    @* This new div constrains the chart's height *@
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="claimsChart"></canvas>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="dashboard-card h-100">
+                    <h2 class="card-title">Current Claim Statuses</h2>
+                    <ul class="list-unstyled mb-0">
+                        <li class="status-item"><span>Pending</span><span class="fw-bold">@Model.PendingClaims</span></li>
+                        <li class="status-item"><span>Approved</span><span class="fw-bold">@Model.ApprovedClaims</span></li>
+                        <li class="status-item" style="border-bottom: none;"><span>Rejected</span><span class="fw-bold">@Model.RejectedClaims</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <h2 class="card-title">Top Lecturers by Claim Value</h2>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Lecturer</th>
+                                <th>Total Claim Value</th>
+                                <th>Claims Submitted</th>
+                                <th>Approval Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var lecturer in Model.TopLecturers)
+                            {
+                                <tr>
+                                    <td>@lecturer.LecturerName</td>
+                                    <td>@lecturer.TotalClaimValue.ToString("C")</td>
+                                    <td>@lecturer.ClaimsSubmitted</td>
+                                    <td><span class="badge bg-@GetApprovalBadgeClass(lecturer.ApprovalRate)">@lecturer.ApprovalRate.ToString("0.##")%</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('claimsChart').getContext('2d');
+
+            const chartLabels = @Json.Serialize(Model.ChartLabels);
+            const chartData = @Json.Serialize(Model.ChartData);
+
+            const claimsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Claims per Month',
+                        data: chartData,
+                        backgroundColor: 'rgba(79, 70, 229, 0.5)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
+
+@{
+    string GetApprovalBadgeClass(double rate)
+    {
+        if (rate >= 90) return "success";
+        if (rate >= 70) return "warning text-dark";
+        return "danger";
+    }
+}

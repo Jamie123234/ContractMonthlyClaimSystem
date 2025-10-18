@@ -1,0 +1,98 @@
+﻿@model IEnumerable<CMCS.Models.Claim>
+@{
+    ViewData["Title"] = "Lecturer Dashboard";
+}
+
+<style>
+    .dashboard-wrapper {
+        padding: 40px 24px;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    .stat-label {
+        color: #6B7280;
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="container-fluid" style="max-width: 1400px;">
+        <h1 class="mb-2">Welcome Back, @ViewData["FullName"]</h1>
+        <p class="text-muted mb-4">Here is an overview of your recent claim submissions.</p>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="dashboard-card stat-card">
+                    <div class="stat-number text-warning">@ViewData["PendingClaims"]</div>
+                    <div class="stat-label">Pending Claims</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dashboard-card stat-card">
+                    <div class="stat-number text-success">@ViewData["ApprovedClaims"]</div>
+                    <div class="stat-label">Approved Claims</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dashboard-card stat-card">
+                    <div class="stat-number text-danger">@ViewData["RejectedClaims"]</div>
+                    <div class="stat-label">Rejected Claims</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-card mt-4">
+            <h2 class="mb-3">Recent Claim Submissions</h2>
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>Date Submitted</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>#@item.Id</td>
+                            <td>@item.SubmissionDate.ToShortDateString()</td>
+                            <td>@item.Amount.ToString("C")</td>
+                            <td><span class="badge bg-@GetStatusBadgeClass(item.Status)">@item.Status.ToString()</span></td>
+                            <td><a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">View</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@{
+    string GetStatusBadgeClass(ClaimStatus status)
+    {
+        return status switch
+        {
+            ClaimStatus.Pending => "warning text-dark",
+            ClaimStatus.Approved => "success",
+            ClaimStatus.Rejected => "danger",
+            _ => "secondary",
+        };
+    }
+}

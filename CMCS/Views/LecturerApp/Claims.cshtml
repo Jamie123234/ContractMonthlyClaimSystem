@@ -1,0 +1,194 @@
+﻿@model IEnumerable<CMCS.Models.Claim>
+@{
+    ViewData["Title"] = "My Claims";
+}
+
+<div class="full-width-page" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); min-height: 100vh; padding: 2rem 1rem;">
+    <div style="max-width: 1400px; margin: 0 auto;">
+
+        <!-- Header Section -->
+        <div style="background: white; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 class="fw-bold mb-2" style="color: #1e293b; font-size: 2rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-file-invoice-dollar" style="color: #667eea;"></i>
+                        My Claims
+                    </h1>
+                    <p class="text-muted mb-0">Track and manage your monthly claims</p>
+                </div>
+                <div>
+                    <a asp-action="NewClaim" class="btn btn-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; font-weight: 600; padding: 12px 32px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-plus"></i>
+                        Submit New Claim
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            @{
+                var totalClaims = Model.Count();
+                var pendingClaims = Model.Count(c => c.Status == ClaimStatus.Pending);
+                var approvedClaims = Model.Count(c => c.Status == ClaimStatus.Approved);
+                var totalAmount = Model.Where(c => c.Status == ClaimStatus.Approved).Sum(c => c.Amount);
+            }
+
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #667eea;">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 500;">Total Claims</p>
+                        <h3 class="fw-bold" style="color: #1e293b; font-size: 2rem; margin: 0;">@totalClaims</h3>
+                    </div>
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-file-alt" style="color: white; font-size: 1.25rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #f59e0b;">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 500;">Pending Review</p>
+                        <h3 class="fw-bold" style="color: #1e293b; font-size: 2rem; margin: 0;">@pendingClaims</h3>
+                    </div>
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-clock" style="color: white; font-size: 1.25rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #10b981;">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 500;">Approved</p>
+                        <h3 class="fw-bold" style="color: #1e293b; font-size: 2rem; margin: 0;">@approvedClaims</h3>
+                    </div>
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-check-circle" style="color: white; font-size: 1.25rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #8b5cf6;">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 500;">Total Approved</p>
+                        <h3 class="fw-bold" style="color: #1e293b; font-size: 2rem; margin: 0;">@totalAmount.ToString("C0")</h3>
+                    </div>
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-coins" style="color: white; font-size: 1.25rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Claims Table -->
+        <div style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            @if (Model.Any())
+            {
+                <div style="overflow-x: auto;">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #e2e8f0;">
+                                <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                                    <i class="fas fa-hashtag" style="margin-right: 0.5rem;"></i>Claim ID
+                                </th>
+                                <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                                    <i class="fas fa-calendar" style="margin-right: 0.5rem;"></i>Date Submitted
+                                </th>
+                                <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                                    <i class="fas fa-dollar-sign" style="margin-right: 0.5rem;"></i>Amount
+                                </th>
+                                <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                                    <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>Status
+                                </th>
+                                <th style="padding: 1rem; color: #64748b; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: right;">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 1.25rem;">
+                                        <span style="font-weight: 600; color: #1e293b; font-family: monospace;">#@item.Id.ToString().PadLeft(5, '0')</span>
+                                    </td>
+                                    <td style="padding: 1.25rem; color: #475569;">
+                                        @item.SubmissionDate.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td style="padding: 1.25rem;">
+                                        <span style="font-weight: 600; color: #1e293b; font-size: 1.05rem;">@item.Amount.ToString("C")</span>
+                                    </td>
+                                    <td style="padding: 1.25rem;">
+                                        @if (item.Status == ClaimStatus.Pending)
+                                        {
+                                            <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #fef3c7; color: #92400e; border-radius: 6px; font-weight: 600; font-size: 0.875rem;">
+                                                <i class="fas fa-clock"></i>
+                                                Pending
+                                            </span>
+                                        }
+                                        else if (item.Status == ClaimStatus.Approved)
+                                        {
+                                            <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #d1fae5; color: #065f46; border-radius: 6px; font-weight: 600; font-size: 0.875rem;">
+                                                <i class="fas fa-check-circle"></i>
+                                                Approved
+                                            </span>
+                                        }
+                                        else if (item.Status == ClaimStatus.Rejected)
+                                        {
+                                            <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #fee2e2; color: #991b1b; border-radius: 6px; font-weight: 600; font-size: 0.875rem;">
+                                                <i class="fas fa-times-circle"></i>
+                                                Rejected
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #f1f5f9; color: #475569; border-radius: 6px; font-weight: 600; font-size: 0.875rem;">
+                                                <i class="fas fa-question-circle"></i>
+                                                @item.Status.ToString()
+                                            </span>
+                                        }
+                                    </td>
+                                    <td style="padding: 1.25rem; text-align: right;">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm" style="background: #f1f5f9; color: #475569; border: none; font-weight: 600; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                                            <i class="fas fa-eye"></i>
+                                            View Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center" style="padding: 4rem 2rem;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; opacity: 0.9;">
+                        <i class="fas fa-file-invoice" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3" style="color: #1e293b;">No Claims Yet</h3>
+                    <p class="text-muted mb-4">You haven't submitted any claims. Start by creating your first claim.</p>
+                    <a asp-action="NewClaim" class="btn btn-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; font-weight: 600; padding: 12px 32px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-plus"></i>
+                        Submit Your First Claim
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #f8fafc;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+</style>

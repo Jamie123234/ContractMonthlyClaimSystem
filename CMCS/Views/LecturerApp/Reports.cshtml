@@ -1,0 +1,114 @@
+﻿@model CMCS.Models.LecturerReportViewModel
+@using System.Text.Json;
+
+@{
+    ViewData["Title"] = "My Reports";
+}
+
+<style>
+    .report-wrapper {
+        padding: 40px 24px;
+    }
+
+    .report-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .stat-label {
+        color: #6B7280;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="report-wrapper">
+    <div class="container-fluid" style="max-width: 1400px;">
+        <h1 class="mb-4">My Claims Report</h1>
+
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="report-card stat-card">
+                    <div class="stat-number">@Model.TotalClaimsSubmitted</div>
+                    <div class="stat-label">Total Claims Submitted</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="report-card stat-card">
+                    <div class="stat-number">@Model.TotalAmountApproved.ToString("C")</div>
+                    <div class="stat-label">Total Approved Amount</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="report-card stat-card">
+                    <div class="stat-number">@Model.AverageClaimAmount.ToString("C")</div>
+                    <div class="stat-label">Average Claim Amount</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="report-card stat-card">
+                    <div class="stat-number">@Model.ApprovalRate.ToString("0.##")%</div>
+                    <div class="stat-label">Approval Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-card mt-4">
+            <h2 class="mb-3">Approved Claim Amounts by Month</h2>
+            <div style="position: relative; height: 350px;">
+                <canvas id="claimsReportChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('claimsReportChart').getContext('2d');
+            const chartLabels = @Json.Serialize(Model.ChartLabels);
+            const chartData = @Json.Serialize(Model.ChartData);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Approved Amount',
+                        data: chartData,
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
