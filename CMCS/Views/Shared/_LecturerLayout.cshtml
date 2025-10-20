@@ -20,9 +20,14 @@
     <style>
         :root {
             --primary-blue: #4F46E5;
+            --primary-blue-light: #6366F1;
             --neutral-50: #F9FAFB;
+            --neutral-100: #F3F4F6;
             --neutral-200: #E5E7EB;
+            --neutral-300: #D1D5DB;
             --neutral-600: #4B5563;
+            --neutral-700: #374151;
+            --neutral-800: #1F2937;
             --neutral-900: #111827;
         }
 
@@ -34,13 +39,21 @@
         .lecturer-navbar {
             background: white;
             border-bottom: 1px solid var(--neutral-200);
-            padding: 0.5rem 0;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .navbar-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 72px;
         }
 
         .navbar-brand-custom {
@@ -50,23 +63,60 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+            .navbar-brand-custom:hover {
+                opacity: 0.8;
+            }
+
+        .navbar-main {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-link-custom {
             color: var(--neutral-600) !important;
             padding: 10px 16px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 500;
             font-size: 0.95rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
 
-        .nav-link-custom:hover {
-            background: var(--neutral-50);
-        }
+            .nav-link-custom:hover {
+                background: var(--neutral-50);
+                color: var(--neutral-900) !important;
+            }
 
-        .nav-link-custom.active {
-            color: var(--primary-blue) !important;
-            font-weight: 600;
+            .nav-link-custom.active {
+                color: var(--primary-blue) !important;
+                background: #EEF2FF;
+                font-weight: 600;
+            }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
         .profile-dropdown {
@@ -78,18 +128,26 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background 0.2s;
         }
+
+            .profile-summary:hover {
+                background: var(--neutral-50);
+            }
 
         .profile-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .profile-info {
@@ -99,6 +157,7 @@
         .profile-name {
             font-weight: 600;
             color: var(--neutral-900);
+            font-size: 0.95rem;
         }
 
         .profile-role {
@@ -106,28 +165,42 @@
             color: var(--neutral-600);
         }
 
-        .dropdown-menu {
+        .dropdown-menu-custom {
             position: absolute;
-            top: 120%;
+            top: calc(100% + 8px);
             right: 0;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            width: 220px;
             padding: 8px;
-            z-index: 100;
+            z-index: 1001;
             display: none;
+            border: 1px solid var(--neutral-200);
         }
 
-        .dropdown-menu.show {
-            display: block;
+            .dropdown-menu-custom.show {
+                display: block;
+                animation: slideDown 0.2s ease;
+            }
+
+        @@keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .dropdown-menu a, .dropdown-menu button {
+        .dropdown-menu-custom a, .dropdown-menu-custom button {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
+            gap: 12px;
+            padding: 12px;
             text-decoration: none;
             color: var(--neutral-800);
             font-size: 0.9rem;
@@ -136,76 +209,414 @@
             width: 100%;
             text-align: left;
             border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .dropdown-menu a:hover, .dropdown-menu button:hover {
-            background-color: #F3F4F6;
-        }
+            .dropdown-menu-custom a:hover, .dropdown-menu-custom button:hover {
+                background-color: var(--neutral-100);
+            }
 
         .dropdown-divider {
             height: 1px;
             background-color: var(--neutral-200);
             margin: 8px 0;
         }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--neutral-700);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+            .mobile-menu-toggle:hover {
+                background: var(--neutral-100);
+            }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .mobile-menu-overlay.show {
+                display: block;
+                opacity: 1;
+            }
+
+        /* Mobile Menu Panel */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: white;
+            z-index: 999;
+            max-height: calc(100vh - 72px);
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+            .mobile-menu.show {
+                display: block;
+                transform: translateY(0);
+            }
+
+        .mobile-menu-content {
+            padding: 24px;
+        }
+
+        .mobile-nav-section {
+            margin-bottom: 24px;
+        }
+
+            .mobile-nav-section h3 {
+                font-size: 0.75rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: var(--neutral-600);
+                margin-bottom: 12px;
+            }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .mobile-nav-links li {
+                margin-bottom: 4px;
+            }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            color: var(--neutral-700);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+            .mobile-nav-link:hover {
+                background: var(--neutral-50);
+                color: var(--neutral-900);
+            }
+
+            .mobile-nav-link.active {
+                background: #EEF2FF;
+                color: var(--primary-blue);
+                font-weight: 600;
+            }
+
+            .mobile-nav-link i {
+                font-size: 1.1rem;
+                width: 20px;
+                text-align: center;
+            }
+
+        .mobile-profile-section {
+            padding: 20px;
+            background: var(--neutral-50);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .mobile-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .mobile-profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .mobile-profile-details h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin: 0;
+        }
+
+        .mobile-profile-details p {
+            font-size: 0.9rem;
+            color: var(--neutral-600);
+            margin: 4px 0 0 0;
+        }
+
+        .mobile-profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-profile-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+            .mobile-profile-btn.primary {
+                background: var(--primary-blue);
+                color: white;
+            }
+
+                .mobile-profile-btn.primary:hover {
+                    background: var(--primary-blue-light);
+                }
+
+            .mobile-profile-btn.secondary {
+                background: white;
+                color: var(--neutral-700);
+                border: 1px solid var(--neutral-300);
+            }
+
+                .mobile-profile-btn.secondary:hover {
+                    background: var(--neutral-50);
+                }
+
+        /* Responsive Breakpoints */
+        @@media (max-width: 991px) {
+            .navbar-main {
+                display: none;
+            }
+
+            .profile-dropdown {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .navbar-container {
+                padding: 0 16px;
+            }
+
+            .navbar-brand-custom {
+                font-size: 1.25rem;
+            }
+
+            .mobile-menu-content {
+                padding: 20px 16px;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <nav class="lecturer-navbar navbar navbar-expand-lg">
-            <div class="navbar-container container-fluid">
-                <a class="navbar-brand-custom" asp-controller="LecturerApp" asp-action="Index"><i class="fas fa-file-invoice"></i> CMCS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link-custom @(currentAction == "Index" ? "active" : "")" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link-custom @(currentAction == "Claims" ? "active" : "")" asp-action="Claims"><i class="fas fa-list-ul"></i> My Claims</a></li>
-                        <li class="nav-item"><a class="nav-link-custom @(currentAction == "Reports" ? "active" : "")" asp-action="Reports"><i class="fas fa-chart-bar"></i> Reports</a></li>
+        <nav class="lecturer-navbar">
+            <div class="navbar-container">
+                <a class="navbar-brand-custom" asp-controller="LecturerApp" asp-action="Index">
+                    <i class="fas fa-file-invoice"></i> CMCS
+                </a>
+
+                <div class="navbar-main">
+                    <ul class="nav-links">
+                        <li><a class="nav-link-custom @(currentAction == "Index" ? "active" : "")" asp-action="Index"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a class="nav-link-custom @(currentAction == "Claims" ? "active" : "")" asp-action="Claims"><i class="fas fa-list-ul"></i> My Claims</a></li>
+                        <li><a class="nav-link-custom @(currentAction == "Reports" ? "active" : "")" asp-action="Reports"><i class="fas fa-chart-bar"></i> Reports</a></li>
                     </ul>
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="profile-dropdown" id="profileDropdown">
-                            <div class="profile-summary">
-                                <div class="profile-avatar">LE</div>
-                                <div class="profile-info">
-                                    <div class="profile-name">@user?.FirstName @user?.LastName</div>
-                                    <div class="profile-role">Lecturer</div>
-                                </div>
-                            </div>
-                            <div class="dropdown-menu" id="profileDropdownMenu">
-                                <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fas fa-user-circle"></i> View Profile</a>
-                                <div class="dropdown-divider"></div>
-                                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <button type="submit"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-                                </form>
+                </div>
+
+                <div class="navbar-actions">
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-summary">
+                            <div class="profile-avatar">@(user?.FirstName?.Substring(0, 1))@(user?.LastName?.Substring(0, 1))</div>
+                            <div class="profile-info">
+                                <div class="profile-name">@user?.FirstName @user?.LastName</div>
+                                <div class="profile-role">Lecturer</div>
                             </div>
                         </div>
+                        <div class="dropdown-menu-custom" id="profileDropdownMenu">
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fas fa-user-circle"></i> View Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button type="submit"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                            </form>
+                        </div>
                     </div>
+
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
                 </div>
             </div>
         </nav>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-content">
+                <div class="mobile-profile-section">
+                    <div class="mobile-profile-header">
+                        <div class="mobile-profile-avatar">@(user?.FirstName?.Substring(0, 1))@(user?.LastName?.Substring(0, 1))</div>
+                        <div class="mobile-profile-details">
+                            <h4>@user?.FirstName @user?.LastName</h4>
+                            <p>Lecturer</p>
+                        </div>
+                    </div>
+                    <div class="mobile-profile-actions">
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="mobile-profile-btn primary">
+                            <i class="fas fa-user-circle"></i> View Profile
+                        </a>
+                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="mobile-profile-btn secondary">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="mobile-nav-section">
+                    <h3>Navigation</h3>
+                    <ul class="mobile-nav-links">
+                        <li>
+                            <a class="mobile-nav-link @(currentAction == "Index" ? "active" : "")" asp-action="Index">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="mobile-nav-link @(currentAction == "Claims" ? "active" : "")" asp-action="Claims">
+                                <i class="fas fa-list-ul"></i>
+                                <span>My Claims</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="mobile-nav-link @(currentAction == "Reports" ? "active" : "")" asp-action="Reports">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Reports</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </header>
+
     <main role="main">
         @RenderBody()
     </main>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Desktop Profile Dropdown
             const dropdown = document.getElementById('profileDropdown');
             const menu = document.getElementById('profileDropdownMenu');
+
             if (dropdown && menu) {
                 dropdown.addEventListener('click', (event) => {
                     event.stopPropagation();
                     menu.classList.toggle('show');
                 });
+
                 document.addEventListener('click', (event) => {
                     if (!dropdown.contains(event.target)) {
                         menu.classList.remove('show');
                     }
                 });
             }
+
+            // Mobile Menu
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+            function toggleMobileMenu() {
+                mobileMenu.classList.toggle('show');
+                mobileMenuOverlay.classList.toggle('show');
+                document.body.style.overflow = mobileMenu.classList.contains('show') ? 'hidden' : '';
+
+                // Toggle icon
+                const icon = mobileMenuToggle.querySelector('i');
+                if (mobileMenu.classList.contains('show')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+            }
+
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
+            }
+
+            // Close mobile menu on navigation
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mobileMenu.classList.contains('show')) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+
+            // Close mobile menu on window resize
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (window.innerWidth > 991 && mobileMenu.classList.contains('show')) {
+                        toggleMobileMenu();
+                    }
+                }, 250);
+            });
         });
     </script>
 </body>

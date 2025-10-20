@@ -4,95 +4,452 @@
 }
 
 <style>
-    .dashboard-wrapper {
-        padding: 40px 24px;
+    :root {
+        --primary-blue: #4F46E5;
+        --primary-blue-light: #6366F1;
+        --success: #10B981;
+        --warning: #F59E0B;
+        --danger: #EF4444;
+        --neutral-50: #F9FAFB;
+        --neutral-100: #F3F4F6;
+        --neutral-200: #E5E7EB;
+        --neutral-600: #4B5563;
+        --neutral-700: #374151;
+        --neutral-800: #1F2937;
+        --neutral-900: #111827;
     }
 
-    .dashboard-card {
-        background: white;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    .dashboard-wrapper {
+        padding: 48px 24px;
+        background: var(--neutral-50);
+        min-height: calc(100vh - 73px);
+    }
+
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .dashboard-header {
+        margin-bottom: 32px;
+    }
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: 8px;
+        }
+
+        .dashboard-header p {
+            color: var(--neutral-600);
+            font-size: 1rem;
+        }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        margin-bottom: 32px;
     }
 
     .stat-card {
-        text-align: center;
+        background: white;
+        border-radius: 12px;
+        padding: 28px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--neutral-200);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--card-color), var(--card-color-light));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.pending {
+            --card-color: var(--warning);
+            --card-color-light: #FCD34D;
+        }
+
+        .stat-card.approved {
+            --card-color: var(--success);
+            --card-color-light: #34D399;
+        }
+
+        .stat-card.rejected {
+            --card-color: var(--danger);
+            --card-color-light: #F87171;
+        }
+
+    .stat-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .stat-card.pending .stat-icon {
+        background: linear-gradient(135deg, var(--warning), #FCD34D);
+    }
+
+    .stat-card.approved .stat-icon {
+        background: linear-gradient(135deg, var(--success), #34D399);
+    }
+
+    .stat-card.rejected .stat-icon {
+        background: linear-gradient(135deg, var(--danger), #F87171);
+    }
+
+    .stat-content {
+        text-align: left;
     }
 
     .stat-number {
         font-size: 2.5rem;
         font-weight: 700;
+        color: var(--neutral-900);
+        line-height: 1;
+        margin-bottom: 8px;
     }
 
     .stat-label {
-        color: #6B7280;
+        color: var(--neutral-600);
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--neutral-200);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+    }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin: 0;
+        }
+
+    .btn-primary-custom {
+        background: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-primary-custom:hover {
+            background: var(--primary-blue-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        }
+
+    .claims-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .claims-table thead th {
+            background: var(--neutral-50);
+            color: var(--neutral-700);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 16px;
+            border-bottom: 2px solid var(--neutral-200);
+            text-align: left;
+        }
+
+        .claims-table tbody tr {
+            border-bottom: 1px solid var(--neutral-200);
+            transition: background-color 0.2s;
+        }
+
+            .claims-table tbody tr:hover {
+                background: var(--neutral-50);
+            }
+
+            .claims-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+        .claims-table tbody td {
+            padding: 20px 16px;
+            color: var(--neutral-800);
+            font-size: 0.95rem;
+        }
+
+    .claim-id {
+        font-weight: 600;
+        color: var(--primary-blue);
+    }
+
+    .claim-amount {
+        font-weight: 600;
+        color: var(--neutral-900);
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        gap: 6px;
+    }
+
+        .status-badge i {
+            font-size: 0.75rem;
+        }
+
+        .status-badge.pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-badge.approved {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-badge.rejected {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+    .btn-view {
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: 1px solid var(--neutral-300);
+        background: white;
+        color: var(--neutral-700);
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .btn-view:hover {
+            background: var(--neutral-50);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--neutral-600);
+    }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--neutral-300);
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--neutral-700);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--neutral-600);
+        }
+
+    @@media (max-width: 768px) {
+        .dashboard-wrapper {
+            padding: 24px 16px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-card {
+            padding: 20px;
+        }
+
+        .claims-table {
+            font-size: 0.875rem;
+        }
+
+            .claims-table thead th,
+            .claims-table tbody td {
+                padding: 12px 8px;
+            }
     }
 </style>
 
 <div class="dashboard-wrapper">
-    <div class="container-fluid" style="max-width: 1400px;">
-        <h1 class="mb-2">Welcome Back, @ViewData["FullName"]</h1>
-        <p class="text-muted mb-4">Here is an overview of your recent claim submissions.</p>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Welcome Back, @ViewData["FullName"]</h1>
+            <p>Here's an overview of your recent claim submissions and activity</p>
+        </div>
 
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="dashboard-card stat-card">
-                    <div class="stat-number text-warning">@ViewData["PendingClaims"]</div>
+        <div class="stats-grid">
+            <div class="stat-card pending">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">@ViewData["PendingClaims"]</div>
                     <div class="stat-label">Pending Claims</div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="dashboard-card stat-card">
-                    <div class="stat-number text-success">@ViewData["ApprovedClaims"]</div>
+
+            <div class="stat-card approved">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">@ViewData["ApprovedClaims"]</div>
                     <div class="stat-label">Approved Claims</div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="dashboard-card stat-card">
-                    <div class="stat-number text-danger">@ViewData["RejectedClaims"]</div>
+
+            <div class="stat-card rejected">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">@ViewData["RejectedClaims"]</div>
                     <div class="stat-label">Rejected Claims</div>
                 </div>
             </div>
         </div>
 
-        <div class="dashboard-card mt-4">
-            <h2 class="mb-3">Recent Claim Submissions</h2>
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Claim ID</th>
-                        <th>Date Submitted</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2>Recent Claim Submissions</h2>
+                <a asp-action="Claims" class="btn-primary-custom">
+                    <i class="fas fa-plus"></i>
+                    Submit New Claim
+                </a>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <table class="claims-table">
+                    <thead>
                         <tr>
-                            <td>#@item.Id</td>
-                            <td>@item.SubmissionDate.ToShortDateString()</td>
-                            <td>@item.Amount.ToString("C")</td>
-                            <td><span class="badge bg-@GetStatusBadgeClass(item.Status)">@item.Status.ToString()</span></td>
-                            <td><a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">View</a></td>
+                            <th>Claim ID</th>
+                            <th>Date Submitted</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Actions</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="claim-id">#@item.Id</td>
+                                <td>@item.SubmissionDate.ToString("MMM dd, yyyy")</td>
+                                <td class="claim-amount">@item.Amount.ToString("C")</td>
+                                <td>
+                                    <span class="status-badge @GetStatusClass(item.Status)">
+                                        <i class="fas @GetStatusIcon(item.Status)"></i>
+                                        @item.Status.ToString()
+                                    </span>
+                                </td>
+                                <td style="text-align: right;">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn-view">
+                                        <i class="fas fa-eye"></i>
+                                        View Details
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No Claims Yet</h3>
+                    <p>You haven't submitted any claims. Click the button above to submit your first claim.</p>
+                </div>
+            }
         </div>
     </div>
 </div>
 
-@{
-    string GetStatusBadgeClass(ClaimStatus status)
+@functions {
+    string GetStatusClass(ClaimStatus status)
     {
         return status switch
         {
-            ClaimStatus.Pending => "warning text-dark",
-            ClaimStatus.Approved => "success",
-            ClaimStatus.Rejected => "danger",
-            _ => "secondary",
+            ClaimStatus.Pending => "pending",
+            ClaimStatus.Approved => "approved",
+            ClaimStatus.Rejected => "rejected",
+            _ => "pending",
+        };
+    }
+
+    string GetStatusIcon(ClaimStatus status)
+    {
+        return status switch
+        {
+            ClaimStatus.Pending => "fa-clock",
+            ClaimStatus.Approved => "fa-check-circle",
+            ClaimStatus.Rejected => "fa-times-circle",
+            _ => "fa-circle",
         };
     }
 }

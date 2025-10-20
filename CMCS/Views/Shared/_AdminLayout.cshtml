@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf--8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Admin | CMCS</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -29,16 +29,23 @@
             --neutral-900: #111827;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background: var(--neutral-50);
             font-family: 'Inter', sans-serif;
             margin: 0;
+            padding: 0;
         }
 
         .admin-layout-wrapper {
             display: flex;
+            min-height: 100vh;
         }
 
+        /* Sidebar Styles */
         .sidebar {
             width: 260px;
             background: white;
@@ -50,6 +57,9 @@
             position: fixed;
             top: 0;
             left: 0;
+            overflow-y: auto;
+            z-index: 999;
+            transition: transform 0.3s ease;
         }
 
         .sidebar-header {
@@ -98,7 +108,7 @@
 
         .main-content {
             flex-grow: 1;
-            margin-left: 260px; /* Same as sidebar width */
+            margin-left: 260px;
         }
 
         .top-bar {
@@ -106,9 +116,20 @@
             border-bottom: 1px solid var(--neutral-200);
             padding: 12px 32px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
             height: 65px;
+            position: relative;
+        }
+
+        .hamburger-menu {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--neutral-800);
+            cursor: pointer;
+            z-index: 1000;
         }
 
         .profile-dropdown {
@@ -158,11 +179,11 @@
             width: 200px;
             padding: 8px;
             z-index: 100;
-            display: none; /* Hidden by default */
+            display: none;
         }
 
             .dropdown-menu.show {
-                display: block; /* Shown with JS */
+                display: block;
             }
 
             .dropdown-menu a, .dropdown-menu button {
@@ -190,41 +211,169 @@
             margin: 8px 0;
         }
 
+        /* Mobile Styles */
+        @@media (max-width: 768px) {
+            .admin-layout-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: fixed;
+                top: 65px;
+                left: 0;
+                right: 0;
+                border-right: none;
+                border-bottom: 1px solid var(--neutral-200);
+                padding: 16px;
+                transform: translateX(-100%);
+                max-height: calc(100vh - 65px);
+                transition: transform 0.3s ease;
+            }
+
+                .sidebar.mobile-open {
+                    transform: translateX(0);
+                }
+
+            .hamburger-menu {
+                display: block;
+            }
+
+            .sidebar-header {
+                display: none;
+            }
+
+            .sidebar-nav {
+                display: flex;
+                gap: 8px;
+                margin: 0;
+            }
+
+                .sidebar-nav li {
+                    flex: 1;
+                }
+
+                .sidebar-nav a {
+                    flex-direction: column;
+                    justify-content: center;
+                    padding: 16px 8px;
+                    margin-bottom: 0;
+                    font-size: 0.85rem;
+                }
+
+                    .sidebar-nav a i {
+                        font-size: 1.5rem;
+                        margin-bottom: 4px;
+                    }
+
+            .main-content {
+                margin-left: 0;
+                margin-top: 65px;
+            }
+
+            .top-bar {
+                padding: 12px 16px;
+                position: relative;
+                z-index: 998;
+            }
+
+            .profile-info {
+                display: none;
+            }
+
+            .profile-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .sidebar-nav a {
+                padding: 12px 4px;
+            }
+
+                .sidebar-nav a i {
+                    font-size: 1.25rem;
+                }
+
+            .top-bar {
+                padding: 12px 12px;
+            }
+
+            .profile-avatar {
+                width: 32px;
+                height: 32px;
+            }
+
+            .dropdown-menu {
+                width: 180px;
+                right: 0;
+            }
+        }
+
+        @@keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="admin-layout-wrapper">
-        <aside class="sidebar">
+        <header class="top-bar">
+            <button class="hamburger-menu" id="hamburgerBtn" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="profile-summary">
+                    <div class="profile-avatar">AD</div>
+                    <div class="profile-info">
+                        <div class="profile-name">@user?.FirstName @user?.LastName</div>
+                        <div class="profile-role">Admin</div>
+                    </div>
+                </div>
+                <div class="dropdown-menu" id="profileDropdownMenu">
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fas fa-user-circle"></i> View Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <aside class="sidebar" id="sidebar">
             <a class="sidebar-header" asp-controller="AdminDashboard" asp-action="Index">
                 <i class="fas fa-file-invoice"></i> CMCS
             </a>
             <ul class="sidebar-nav">
-                <li><a asp-action="Dashboard" class="@(currentAction == "Dashboard" ? "active" : "")"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a asp-action="ManageUsers" class="@(currentAction == "ManageUsers" || currentAction == "EditUserRoles" ? "active" : "")"><i class="fas fa-users"></i> Users</a></li>
-                <li><a asp-action="ManageRoles" class="@(currentAction == "ManageRoles" ? "active" : "")"><i class="fas fa-user-tag"></i> Roles</a></li>
+                <li><a asp-action="Dashboard" class="@(currentAction == "Dashboard" ? "active" : "")"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a asp-action="ManageUsers" class="@(currentAction == "ManageUsers" || currentAction == "EditUserRoles" ? "active" : "")"><i class="fas fa-users"></i> <span>Users</span></a></li>
+                <li><a asp-action="ManageRoles" class="@(currentAction == "ManageRoles" ? "active" : "")"><i class="fas fa-user-tag"></i> <span>Roles</span></a></li>
             </ul>
         </aside>
 
         <div class="main-content">
-            <header class="top-bar">
-                <div class="profile-dropdown" id="profileDropdown">
-                    <div class="profile-summary">
-                        <div class="profile-avatar">AD</div>
-                        <div class="profile-info">
-                            <div class="profile-name">@user?.FirstName @user?.LastName</div>
-                            <div class="profile-role">Admin</div>
-                        </div>
-                    </div>
-                    <div class="dropdown-menu" id="profileDropdownMenu">
-                        <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fas fa-user-circle"></i> View Profile</a>
-                        <div class="dropdown-divider"></div>
-                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-                        </form>
-                    </div>
-                </div>
-            </header>
-
             <main role="main">
                 @RenderBody()
             </main>
@@ -239,6 +388,32 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Hamburger menu toggle
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const sidebar = document.getElementById('sidebar');
+
+            if (hamburgerBtn && sidebar) {
+                hamburgerBtn.addEventListener('click', function () {
+                    sidebar.classList.toggle('mobile-open');
+                });
+
+                // Close sidebar when a nav item is clicked
+                const sidebarLinks = sidebar.querySelectorAll('.sidebar-nav a');
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', function () {
+                        sidebar.classList.remove('mobile-open');
+                    });
+                });
+
+                // Close sidebar when clicking outside
+                document.addEventListener('click', function (event) {
+                    if (!sidebar.contains(event.target) && !hamburgerBtn.contains(event.target)) {
+                        sidebar.classList.remove('mobile-open');
+                    }
+                });
+            }
+
+            // Profile dropdown menu
             const dropdown = document.getElementById('profileDropdown');
             const menu = document.getElementById('profileDropdownMenu');
 

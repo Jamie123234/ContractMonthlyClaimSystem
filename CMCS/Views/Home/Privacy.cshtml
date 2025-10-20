@@ -2,52 +2,369 @@
     ViewData["Title"] = "Privacy Policy";
 }
 
-<div class="full-width-page" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 3rem 1rem;">
-    <div style="max-width: 1200px; margin: 0 auto;">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    }
+
+    .full-width-page {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 3rem 1rem;
+    }
+
+    .container-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Header Styles */
+    .header-section {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: white;
+    }
+
+    .header-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        margin-bottom: 1rem;
+    }
+
+        .header-icon i {
+            font-size: 1.8rem;
+        }
+
+    .header-section h1 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+    }
+
+    .header-section p {
+        opacity: 0.9;
+        font-size: 1rem;
+    }
+
+    /* Main Content Card */
+    .main-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 3rem;
+    }
+
+    /* Section Styles */
+    section {
+        margin-bottom: 2rem;
+    }
+
+        section h2 {
+            color: #1e293b;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+        }
+
+            section h2 i {
+                color: #667eea;
+            }
+
+        section p, section div {
+            color: #475569;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        section ul {
+            padding-left: 1.25rem;
+            color: #475569;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+            section ul li {
+                margin-bottom: 0.5rem;
+            }
+
+    /* Security Cards */
+    .security-card {
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        border-left: 3px solid #667eea;
+        margin-bottom: 0.75rem;
+    }
+
+        .security-card strong {
+            color: #334155;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .security-card p {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+    /* Contact Section */
+    .contact-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 1.5rem;
+        border-radius: 12px;
+        color: white;
+    }
+
+        .contact-box p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            opacity: 0.95;
+            color: white;
+        }
+
+    .contact-info {
+        font-size: 0.95rem;
+        line-height: 1.8;
+    }
+
+        .contact-info div {
+            color: white;
+        }
+
+        .contact-info a {
+            color: white;
+            text-decoration: underline;
+        }
+
+            .contact-info a:hover {
+                opacity: 0.8;
+            }
+
+    /* Footer Note */
+    .footer-note {
+        text-align: center;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        color: white;
+        font-size: 0.9rem;
+    }
+
+        .footer-note p {
+            color: white;
+            margin: 0;
+        }
+
+    /* Mobile Responsive */
+    @@media (max-width: 768px) {
+        .full-width-page {
+            padding: 1.5rem 0.75rem;
+        }
+
+        .main-card {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .header-section h1 {
+            font-size: 1.75rem;
+        }
+
+        .header-section p {
+            font-size: 0.9rem;
+        }
+
+        section h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        section p, section div, section ul {
+            font-size: 0.9rem;
+        }
+
+        .security-card {
+            padding: 0.75rem;
+        }
+
+            .security-card strong {
+                font-size: 0.9rem;
+            }
+
+        .contact-box {
+            padding: 1rem;
+        }
+
+        .contact-info {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer-note {
+            padding: 1rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .full-width-page {
+            padding: 1rem 0.5rem;
+        }
+
+        .container-wrapper {
+            margin: 0 auto;
+        }
+
+        .main-card {
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .header-icon {
+            width: 56px;
+            height: 56px;
+        }
+
+            .header-icon i {
+                font-size: 1.5rem;
+            }
+
+        .header-section h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-section p {
+            font-size: 0.85rem;
+        }
+
+        section {
+            margin-bottom: 1.5rem;
+        }
+
+            section h2 {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            section p, section div, section ul {
+                font-size: 0.85rem;
+                line-height: 1.6;
+            }
+
+                section ul li {
+                    margin-bottom: 0.35rem;
+                }
+
+        .security-card {
+            padding: 0.65rem;
+            margin-bottom: 0.5rem;
+        }
+
+            .security-card strong {
+                font-size: 0.85rem;
+            }
+
+            .security-card p {
+                font-size: 0.8rem;
+            }
+
+        .contact-box {
+            padding: 0.75rem;
+        }
+
+            .contact-box p {
+                margin-bottom: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+        .contact-info {
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .footer-note {
+            padding: 0.75rem;
+            font-size: 0.8rem;
+        }
+    }
+</style>
+
+<div class="full-width-page">
+    <div class="container-wrapper">
 
         <!-- Header -->
-        <div class="text-center mb-4" style="color: white;">
-            <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: rgba(255,255,255,0.2); border-radius: 50%; margin-bottom: 1rem;">
-                <i class="fas fa-shield-alt" style="font-size: 1.8rem;"></i>
+        <div class="header-section">
+            <div class="header-icon">
+                <i class="fas fa-shield-alt"></i>
             </div>
-            <h1 class="fw-bold mb-2" style="font-size: 2.5rem;">Privacy Policy</h1>
-            <p style="opacity: 0.9; font-size: 1rem;">Last updated: October 18, 2025</p>
+            <h1>Privacy Policy</h1>
+            <p>Last updated: October 18, 2025</p>
         </div>
 
         <!-- Main Content Card -->
-        <div class="shadow-lg" style="background: white; border-radius: 16px; padding: 3rem; margin-bottom: 2rem;">
+        <div class="main-card">
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem;">
+            <div class="content-grid">
 
                 <!-- Left Column -->
                 <div>
                     <!-- Introduction -->
-                    <section class="mb-4">
-                        <p style="color: #475569; line-height: 1.7; font-size: 0.95rem;">
+                    <section>
+                        <p>
                             At CMCS, we take your privacy seriously. This policy explains how we collect, use, and protect your information when you use our platform.
                         </p>
                     </section>
 
                     <!-- Information We Collect -->
-                    <section class="mb-4">
-                        <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: 1.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-database" style="color: #667eea;"></i>
+                    <section>
+                        <h2>
+                            <i class="fas fa-database"></i>
                             Information We Collect
                         </h2>
-                        <div style="color: #475569; line-height: 1.7; font-size: 0.9rem;">
-                            <strong style="color: #334155;">Personal Information:</strong> Name, email, password (encrypted)<br>
-                            <strong style="color: #334155;">Claim Data:</strong> Contracts, claims, financial records<br>
-                            <strong style="color: #334155;">Technical Data:</strong> IP address, browser info, cookies
+                        <div>
+                            <strong>Personal Information:</strong> Name, email, password (encrypted)<br>
+                            <strong>Claim Data:</strong> Contracts, claims, financial records<br>
+                            <strong>Technical Data:</strong> IP address, browser info, cookies
                         </div>
                     </section>
 
                     <!-- How We Use It -->
-                    <section class="mb-4">
-                        <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: 1.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-cogs" style="color: #667eea;"></i>
+                    <section>
+                        <h2>
+                            <i class="fas fa-cogs"></i>
                             How We Use Your Data
                         </h2>
-                        <ul style="color: #475569; line-height: 1.7; font-size: 0.9rem; padding-left: 1.25rem;">
+                        <ul>
                             <li>Provide and improve our services</li>
                             <li>Manage your account and authentication</li>
                             <li>Send notifications and updates</li>
@@ -57,23 +374,23 @@
                     </section>
 
                     <!-- Data Security -->
-                    <section class="mb-4">
-                        <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: 1.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-lock" style="color: #667eea;"></i>
+                    <section>
+                        <h2>
+                            <i class="fas fa-lock"></i>
                             Data Security
                         </h2>
-                        <div style="display: grid; gap: 0.75rem;">
-                            <div style="padding: 0.75rem; background: #f8fafc; border-radius: 8px; border-left: 3px solid #667eea;">
-                                <strong style="color: #334155; font-size: 0.9rem;">🔒 SSL/TLS Encryption</strong>
-                                <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0 0;">All data transmissions are encrypted</p>
+                        <div>
+                            <div class="security-card">
+                                <strong>🔒 SSL/TLS Encryption</strong>
+                                <p>All data transmissions are encrypted</p>
                             </div>
-                            <div style="padding: 0.75rem; background: #f8fafc; border-radius: 8px; border-left: 3px solid #667eea;">
-                                <strong style="color: #334155; font-size: 0.9rem;">🛡️ Secure Storage</strong>
-                                <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0 0;">Protected databases with access controls</p>
+                            <div class="security-card">
+                                <strong>🛡️ Secure Storage</strong>
+                                <p>Protected databases with access controls</p>
                             </div>
-                            <div style="padding: 0.75rem; background: #f8fafc; border-radius: 8px; border-left: 3px solid #667eea;">
-                                <strong style="color: #334155; font-size: 0.9rem;">✓ Authentication</strong>
-                                <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0 0;">Strong password requirements</p>
+                            <div class="security-card">
+                                <strong>✓ Authentication</strong>
+                                <p>Strong password requirements</p>
                             </div>
                         </div>
                     </section>
@@ -82,14 +399,14 @@
                 <!-- Right Column -->
                 <div>
                     <!-- Your Rights -->
-                    <section class="mb-4">
-                        <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: 1.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-user-shield" style="color: #667eea;"></i>
+                    <section>
+                        <h2>
+                            <i class="fas fa-user-shield"></i>
                             Your Rights
                         </h2>
-                        <div style="color: #475569; line-height: 1.7; font-size: 0.9rem;">
+                        <div>
                             You have the right to:
-                            <ul style="padding-left: 1.25rem; margin-top: 0.5rem;">
+                            <ul style="margin-top: 0.5rem;">
                                 <li><strong>Access</strong> your personal data</li>
                                 <li><strong>Correct</strong> inaccurate information</li>
                                 <li><strong>Delete</strong> your data (subject to legal requirements)</li>
@@ -101,36 +418,36 @@
                     </section>
 
                     <!-- Cookies -->
-                    <section class="mb-4">
-                        <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: 1.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-cookie-bite" style="color: #667eea;"></i>
+                    <section>
+                        <h2>
+                            <i class="fas fa-cookie-bite"></i>
                             Cookies & Tracking
                         </h2>
-                        <p style="color: #475569; line-height: 1.7; font-size: 0.9rem;">
+                        <p>
                             We use cookies to enhance your experience, remember preferences, analyze usage, and improve security.
                             You can control cookies through your browser settings.
                         </p>
                     </section>
 
                     <!-- Third Parties -->
-                    <section class="mb-4">
-                        <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: 1.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-handshake" style="color: #667eea;"></i>
+                    <section>
+                        <h2>
+                            <i class="fas fa-handshake"></i>
                             Third-Party Services
                         </h2>
-                        <p style="color: #475569; line-height: 1.7; font-size: 0.9rem;">
+                        <p>
                             We may use third-party providers for hosting, analytics, and payment processing. These providers are
                             contractually obligated to protect your data. <strong>We do not sell your information.</strong>
                         </p>
                     </section>
 
                     <!-- Data Retention -->
-                    <section class="mb-4">
-                        <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: 1.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-clock" style="color: #667eea;"></i>
+                    <section>
+                        <h2>
+                            <i class="fas fa-clock"></i>
                             Data Retention
                         </h2>
-                        <p style="color: #475569; line-height: 1.7; font-size: 0.9rem;">
+                        <p>
                             We retain your data only as long as necessary to provide services and meet legal obligations.
                             Data is securely deleted or anonymized when no longer needed.
                         </p>
@@ -138,14 +455,14 @@
 
                     <!-- Contact -->
                     <section>
-                        <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: 1.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-envelope" style="color: #667eea;"></i>
+                        <h2>
+                            <i class="fas fa-envelope"></i>
                             Contact Us
                         </h2>
-                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 12px; color: white;">
-                            <p style="margin-bottom: 1rem; font-size: 0.9rem; opacity: 0.95;">Questions about this policy? Reach out to us:</p>
-                            <div style="font-size: 0.9rem; line-height: 1.8;">
-                                <div><strong>Email:</strong> <a href="mailto:privacy@cmcs.com" style="color: white; text-decoration: underline;">privacy@cmcs.com</a></div>
+                        <div class="contact-box">
+                            <p>Questions about this policy? Reach out to us:</p>
+                            <div class="contact-info">
+                                <div><strong>Email:</strong> <a href="mailto:privacy@cmcs.com">privacy@cmcs.com</a></div>
                                 <div><strong>Phone:</strong> +27 (0) 123-4567</div>
                                 <div><strong>Location:</strong> Cape Town, South Africa</div>
                             </div>
@@ -156,8 +473,8 @@
         </div>
 
         <!-- Footer Note -->
-        <div class="text-center" style="padding: 1.5rem; background: rgba(255,255,255,0.1); border-radius: 12px; backdrop-filter: blur(10px); color: white;">
-            <p style="margin: 0; font-size: 0.9rem;">
+        <div class="footer-note">
+            <p>
                 <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
                 We may update this policy from time to time. Significant changes will be communicated via email or platform notification.
             </p>

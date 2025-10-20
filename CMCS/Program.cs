@@ -81,8 +81,7 @@ namespace CMCS
             // Assign Admin role to specific user
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var adminUser = await userManager.FindByEmailAsync("admin@cmcs.com");
-            var programCoordinator = await userManager.FindByEmailAsync("programcoordinator@cmcs.com");
-            var programCoordinatorUser = await userManager.FindByEmailAsync("admin@cmcs.com");
+            var programCoordinatorUser = await userManager.FindByEmailAsync("programcoordinator@cmcs.com");
 
             if (programCoordinatorUser != null && !await userManager.IsInRoleAsync(programCoordinatorUser, "ProgramCoordinator"))
             {

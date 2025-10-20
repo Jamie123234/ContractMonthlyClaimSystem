@@ -6,340 +6,635 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="full-width-page">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-    <style>
-        .hero-section {
-            background: linear-gradient(135deg, #4F46E5 0%, #818CF8 100%);
-            color: white;
-            padding: 120px 0 100px;
-            margin: 0;
-            width: 100%;
+    body {
+        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        overflow-x: hidden;
+    }
+
+    @@keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
         }
 
-        .hero-content {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-            padding: 0 24px;
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @@keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    @@keyframes glow {
+        0%, 100% {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        50% {
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+        }
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        position: relative;
+        overflow: hidden;
+        padding: 120px 24px 100px;
+        color: white;
+        width: 100%;
+    }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+    .hero-content {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        background: rgba(139, 92, 246, 0.2);
+        border: 1px solid rgba(139, 92, 246, 0.5);
+        color: #c4b5fd;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 24px;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        animation: fadeInDown 0.8s ease-out 0.1s both;
+        background: linear-gradient(135deg, #e0e7ff 0%, #fca5a5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        font-weight: 400;
+        margin-bottom: 40px;
+        line-height: 1.8;
+        animation: fadeInDown 1s ease-out 0.2s both;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+        color: white;
+        padding: 14px 32px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        border: none;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
+        }
+
+    .btn-secondary {
+        background: transparent;
+        color: white;
+        padding: 14px 32px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        border: 2px solid rgba(139, 92, 246, 0.6);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+        .btn-secondary:hover {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: #8b5cf6;
+            transform: translateY(-3px);
+        }
+
+    /* Features Section */
+    .features-section {
+        padding: 120px 24px;
+        background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+        width: 100%;
+    }
+
+    .features-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 70px;
+    }
+
+    .section-title {
+        font-size: 2.75rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 16px;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .section-description {
+        font-size: 1.1rem;
+        color: #64748b;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.8;
+        animation: fadeInUp 0.8s ease-out 0.1s both;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+    }
+
+    .feature-card {
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8b5cf6, #6366f1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.15);
+            border-color: #dbeafe;
+        }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+    }
+
+    .feature-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 12px;
+    }
+
+    .feature-description {
+        font-size: 0.95rem;
+        color: #64748b;
+        line-height: 1.6;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 50%, #2d1b69 100%);
+        padding: 120px 24px;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+    .cta-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .cta-title {
+        font-size: 2.75rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    .cta-description {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 50px;
+        line-height: 1.8;
+        animation: fadeInUp 0.8s ease-out 0.1s both;
+    }
+
+    .portal-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .portal-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: white;
+        padding: 40px 30px;
+        border-radius: 16px;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .portal-card:hover::before {
+            opacity: 1;
+        }
+
+        .portal-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.3);
+        }
+
+    .portal-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 20px;
+        transition: transform 0.4s ease;
+        position: relative;
+        z-index: 2;
+    }
+
+    .portal-card:hover .portal-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .portal-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .portal-subtitle {
+        font-size: 0.95rem;
+        opacity: 0.85;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Mobile Responsive */
+    @@media (max-width: 768px) {
+        .hero-section {
+            padding: 80px 16px 60px;
         }
 
         .hero-title {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 24px;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
+            font-size: 2.25rem;
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
-            opacity: 0.95;
-            font-weight: 400;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-hero-primary {
-            background: white;
-            color: #4F46E5;
-            padding: 16px 40px;
-            font-size: 1.125rem;
-            font-weight: 600;
-            border-radius: 10px;
-            border: none;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-            .btn-hero-primary:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-                color: #4F46E5;
-            }
-
-        .btn-hero-outline {
-            background: transparent;
-            color: white;
-            padding: 16px 40px;
-            font-size: 1.125rem;
-            font-weight: 600;
-            border-radius: 10px;
-            border: 2px solid white;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-            .btn-hero-outline:hover {
-                background: white;
-                color: #4F46E5;
-                transform: translateY(-2px);
-            }
-
-        .features-section {
-            padding: 100px 0;
-            background: white;
-            margin: 0;
-            width: 100%;
-        }
-
-        .features-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 70px;
+            font-size: 1rem;
+            margin-bottom: 30px;
         }
 
         .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 16px;
+            font-size: 2rem;
         }
 
         .section-description {
-            font-size: 1.25rem;
-            color: #4B5563;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.7;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-        }
-
-        .feature-card {
-            text-align: center;
-            padding: 40px 30px;
-            border-radius: 16px;
-            background: #F9FAFB;
-            transition: all 0.3s ease;
-        }
-
-            .feature-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 20px 40px rgba(79, 70, 229, 0.15);
-                background: white;
-            }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #4F46E5, #818CF8);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            color: white;
-            font-size: 36px;
-        }
-
-        .feature-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 16px;
-        }
-
-        .feature-description {
             font-size: 1rem;
-            color: #4B5563;
-            line-height: 1.6;
-        }
-
-        .cta-section {
-            background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
-            padding: 100px 0;
-            color: white;
-            text-align: center;
-            margin: 0;
-            width: 100%;
-        }
-
-        .cta-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 24px;
         }
 
         .cta-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 24px;
+            font-size: 2rem;
         }
 
         .cta-description {
-            font-size: 1.25rem;
-            opacity: 0.95;
+            font-size: 1rem;
             margin-bottom: 40px;
-            line-height: 1.6;
+        }
+
+        .features-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
         .portal-cards {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
+            grid-template-columns: 1fr;
+            gap: 16px;
         }
 
         .portal-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 40px 30px;
-            border-radius: 16px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-            flex-basis: 280px; /* Set a base width */
-            flex-grow: 1; /* Allow cards to grow */
+            padding: 30px 20px;
         }
 
-            .portal-card:hover {
-                background: white;
-                color: #4F46E5;
-                transform: scale(1.05);
-                border-color: white;
-                text-decoration: none;
-            }
+        .feature-card {
+            padding: 30px;
+        }
+
+        .hero-buttons {
+            gap: 12px;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 12px 24px;
+            font-size: 0.95rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .hero-section {
+            padding: 60px 12px 50px;
+        }
+
+        .hero-title {
+            font-size: 1.75rem;
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .hero-badge {
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .cta-title {
+            font-size: 1.5rem;
+        }
+
+        .portal-card {
+            padding: 24px 16px;
+        }
 
         .portal-icon {
-            font-size: 3.5rem;
-            display: block;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin-bottom: 16px;
         }
 
-        .portal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
+        .feature-card {
+            padding: 20px;
         }
 
-        .portal-subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+            margin-bottom: 16px;
         }
 
-        .portal-card:hover .portal-subtitle {
-            opacity: 0.7;
+        .feature-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
         }
 
-        @@media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.125rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .cta-title {
-                font-size: 2rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
+        .feature-description {
+            font-size: 0.85rem;
         }
-    </style>
+    }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    link {
+        text-decoration: none;
+    }
 
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">
-                <i class="fas fa-file-invoice-dollar"></i><br />
-                Contract Monthly Claim System
-            </h1>
-            <p class="hero-subtitle">
-                Streamline your claims process with our modern platform for lecturers to submit monthly contract claims and administrators to efficiently review and approve them.
-            </p>
-            <div class="hero-buttons">
-                <a href="/Identity/Account/Login" class="btn-hero-primary">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-                <a href="/Identity/Account/Register" class="btn-hero-outline">
-                    <i class="fas fa-user-plus"></i> Register
-                </a>
-            </div>
+    a {
+        text-decoration: none;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<section class="hero-section">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-sparkles"></i> Modern Claims Management
         </div>
-    </section>
+        <h1 class="hero-title">
+            Contract Monthly Claim System
+        </h1>
+        <p class="hero-subtitle">
+            Streamline your claims process with our intelligent platform. Lecturers submit claims effortlessly, administrators review with precision, all in one unified solution.
+        </p>
+        <div class="hero-buttons">
+            <a href="/Identity/Account/Login" class="btn-primary">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="/Identity/Account/Register" class="btn-secondary">
+                <i class="fas fa-user-plus"></i> Register
+            </a>
+        </div>
+    </div>
+</section>
 
-    <section class="features-section">
-        <div class="features-container">
-            <div class="section-header">
-                <h2 class="section-title">Why Choose CMCS?</h2>
-                <p class="section-description">
-                    A comprehensive solution designed to make claim management effortless for both lecturers and administrators.
+<section class="features-section">
+    <div class="features-container">
+        <div class="section-header">
+            <h2 class="section-title">Why Choose CMCS?</h2>
+            <p class="section-description">
+                A comprehensive solution designed to make claim management effortless for both lecturers and administrators.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="feature-title">Lightning Fast</h3>
+                <p class="feature-description">
+                    Submit claims in seconds with our streamlined interface. No bureaucratic hassle, just straightforward submission and tracking.
                 </p>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-upload"></i>
-                    </div>
-                    <h3 class="feature-title">Easy Submission</h3>
-                    <p class="feature-description">
-                        Submit claims with detailed work hours and supporting documents in just a few minutes. Our intuitive interface guides you through every step.
-                    </p>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
                 </div>
+                <h3 class="feature-title">Real-Time Insights</h3>
+                <p class="feature-description">
+                    Monitor your claim status instantly. Track every step from submission to approval with comprehensive dashboards and notifications.
+                </p>
+            </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="feature-title">Real-Time Tracking</h3>
-                    <p class="feature-description">
-                        Monitor your claim submissions in real-time with comprehensive dashboards. Always know the status of your claims at a glance.
-                    </p>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3 class="feature-title">Quick Approval</h3>
-                    <p class="feature-description">
-                        Administrators can review and process claims efficiently with all details and documents readily available in one place.
-                    </p>
-                </div>
+                <h3 class="feature-title">Secure & Reliable</h3>
+                <p class="feature-description">
+                    Your data is protected with enterprise-grade security. Bank-level encryption ensures your information stays safe and confidential.
+                </p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-</div>
 <section class="cta-section">
     <div class="cta-container">
-        <h2 class="cta-title">Ready to Get Started?</h2>
+        <h2 class="cta-title">Access Your Portal</h2>
         <p class="cta-description">
-            Choose your portal below to access the Contract Monthly Claim System
+            Select your role to get started with CMCS
         </p>
 
         <div class="portal-cards">
@@ -349,9 +644,9 @@
                 if (await UserManager.IsInRoleAsync(user, "Lecturer"))
                 {
                     <a asp-controller="LecturerApp" asp-action="Index" class="portal-card">
-                        <i class="fas fa-chalkboard-teacher portal-icon"></i>
+                        <i class="fas fa-chalkboard-user portal-icon"></i>
                         <div class="portal-title">Lecturer Portal</div>
-                        <div class="portal-subtitle">Submit and track your claims</div>
+                        <div class="portal-subtitle">Submit and track claims</div>
                     </a>
                 }
                 if (await UserManager.IsInRoleAsync(user, "ProgramCoordinator"))
@@ -359,13 +654,13 @@
                     <a asp-controller="CoordinatorApp" asp-action="Index" class="portal-card">
                         <i class="fas fa-tasks portal-icon"></i>
                         <div class="portal-title">Coordinator Portal</div>
-                        <div class="portal-subtitle">Manage and review claims</div>
+                        <div class="portal-subtitle">Review and manage claims</div>
                     </a>
                 }
                 if (await UserManager.IsInRoleAsync(user, "Admin"))
                 {
                     <a asp-controller="AdminDashboard" asp-action="Index" class="portal-card">
-                        <i class="fas fa-user-shield portal-icon"></i>
+                        <i class="fas fa-crown portal-icon"></i>
                         <div class="portal-title">Administrator Portal</div>
                         <div class="portal-subtitle">Oversee the entire system</div>
                     </a>
@@ -374,7 +669,7 @@
             else
             {
                 <a href="/Identity/Account/Login" class="portal-card">
-                    <i class="fas fa-chalkboard-teacher portal-icon"></i>
+                    <i class="fas fa-chalkboard-user portal-icon"></i>
                     <div class="portal-title">Lecturer Portal</div>
                     <div class="portal-subtitle">Login to submit claims</div>
                 </a>
@@ -384,7 +679,7 @@
                     <div class="portal-subtitle">Login to manage claims</div>
                 </a>
                 <a href="/Identity/Account/Login" class="portal-card">
-                    <i class="fas fa-user-shield portal-icon"></i>
+                    <i class="fas fa-crown portal-icon"></i>
                     <div class="portal-title">Administrator Portal</div>
                     <div class="portal-subtitle">Login to oversee system</div>
                 </a>
